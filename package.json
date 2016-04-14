@@ -1,0 +1,12 @@
+{
+  "name": "botmon",
+  "version": "0.0.0",
+  "description": "",
+  "author": "mguida22",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "dotenv": "^2.0.0",
+    "request": "^2.71.0"
+  }
+}
