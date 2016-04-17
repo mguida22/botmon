@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('<a href="https://www.facebook.com/botmon.the.bot/">Botmon</a>');
 });
 
 app.get('/webhook', (req, res) => {
@@ -31,8 +31,6 @@ app.post('/webhook', (req, res) => {
       let msg = {
         text: evt.message.text
       }
-
-      console.log(`${sender}: ${text}`);
 
       request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -55,6 +53,7 @@ app.post('/webhook', (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Botmon server listening on port ${port}!`);
 });
