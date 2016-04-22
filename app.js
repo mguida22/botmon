@@ -20,9 +20,9 @@ app.get('/', (req, res) => {
 app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] === process.env.FB_VERIFY_TOKEN) {
     res.send(req.query['hub.challenge']);
+  } else {
+    res.send('Error, wrong validation token');
   }
-
-  res.send('Error, wrong validation token');
 });
 
 app.post('/webhook', (req, res) => {

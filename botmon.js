@@ -4,6 +4,8 @@ const got = require('got');
 const d2d = require('degrees-to-direction');
 const Promise = require('bluebird');
 
+const util = require('./utility');
+
 function reply(text) {
   return new Promise((resolve, reject) => {
     // current trending news
@@ -36,10 +38,14 @@ function ski(text) {
 }
 
 function weather(text) {
+  text = util.normalize(text.replace('weather', ''));
+  let location = util.getNouns(text);
+  location = location[location.length - 1];
+
   return got('http://api.openweathermap.org/data/2.5/weather', {
     json: true,
     query: {
-      q: 'Boulder,CO',
+      q: location,
       units: 'imperial'
     },
     headers: {
