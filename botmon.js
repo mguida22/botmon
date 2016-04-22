@@ -1,23 +1,30 @@
 "use strict";
 
 const got = require('got');
+const d2d = require('degrees-to-direction');
+const Promise = require('bluebird');
 
 function reply(text) {
-  // current trending news
-  // where should i ski? (most snow)
-  // current weather for your location
-  // weather for any location
-  // fortune cookie style fortune
-  // make a random decision
-  // random jokes
-  // new movies
-  // movie reviews
-  // movie trailers
-  // movie showtimes
+  return new Promise((resolve, reject) => {
+    // current trending news
+    // where should i ski? (most snow)
+    // weather for any location
+    // fortune cookie style fortune
+    // make a random decision
+    // random jokes
+    // new movies
+    // movie reviews
+    // movie trailers
+    // movie showtimes
 
-  return {
-    text
-  };
+    if (text.indexOf('weather') > 0) {
+      weather(text).then(msg => {
+        resolve(msg);
+      });
+    } else {
+      resolve(text);
+    }
+  });
 }
 
 function news(text) {
@@ -29,7 +36,27 @@ function ski(text) {
 }
 
 function weather(text) {
-  return text;
+  return got('http://api.openweathermap.org/data/2.5/weather', {
+    json: true,
+    query: {
+      q: 'Boulder,CO',
+      units: 'imperial'
+    },
+    headers: {
+      'x-api-key': process.env.WEATHER_API_KEY,
+    }
+  }).then(res => {
+    let data = res.body;
+    let msg = `The average temperature is ${data.main.temp} ° F with ` +
+      `${data.weather[0].description} in ${data.name} today. There's a ` +
+      `${data.wind.speed} mph wind coming from ${d2d(data.wind.deg)} ` +
+      `and ${data.main.humidity}% humidity.`
+
+    return msg;
+  }).catch(err => {
+    console.error(err);
+    return 'I\'m sorry, I couldn\'t get the weather :(';
+  });
 }
 
 function fortunes(text) {

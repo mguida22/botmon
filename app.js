@@ -31,21 +31,22 @@ app.post('/webhook', (req, res) => {
   req.body.entry[0].messaging.forEach(evt => {
     sender = evt.sender.id;
     if (evt.message && evt.message.text) {
-      msg = botmon.reply(evt.message.text);
-
-      got.post('https://graph.facebook.com/v2.6/me/messages', {
-        json: true,
-        headers: {
-          'Content-type': 'application/json'
-        },
-        query: { access_token: process.env.FB_ACCESS_TOKEN },
-        body: JSON.stringify({
-          recipient: { id: sender },
-          message: msg,
-        })
-      }).catch(err => {
-        console.error(err.response.body);
-      })
+      botmon.reply(evt.message.text).then(msg => {
+        msg = { text: msg };
+        got.post('https://graph.facebook.com/v2.6/me/messages', {
+          json: true,
+          headers: {
+            'Content-type': 'application/json'
+          },
+          query: { access_token: process.env.FB_ACCESS_TOKEN },
+          body: JSON.stringify({
+            recipient: { id: sender },
+            message: msg,
+          })
+        }).catch(err => {
+          console.error(err.response.body);
+        });
+      });
     }
   });
 
