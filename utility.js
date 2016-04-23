@@ -23,5 +23,5 @@ function getNouns(str) {
 
 module.exports = {
   getNouns,
-  normalize
+  normalize,
 };

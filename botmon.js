@@ -4,6 +4,8 @@ const got = require('got');
 const d2d = require('degrees-to-direction');
 const Promise = require('bluebird');
 
+const readFile = Promise.promisify(require('fs').readFile);
+
 const util = require('./utility');
 
 function reply(text) {
@@ -21,6 +23,10 @@ function reply(text) {
 
     if (text.indexOf('weather') > 0) {
       weather(text).then(msg => {
+        resolve(msg);
+      });
+    } else if (text.indexOf('fortune') > 0) {
+      fortunes().then(msg => {
         resolve(msg);
       });
     } else {
@@ -65,8 +71,14 @@ function weather(text) {
   });
 }
 
-function fortunes(text) {
-  return text;
+function fortunes() {
+  return readFile(`${__dirname}/data/fortunes.txt`, 'utf8').then(data => {
+    let lines = data.split('\n');
+    return lines[Math.floor(Math.random()*lines.length)];
+  }).catch(err => {
+    console.error(err);
+    return 'I\'m fresh outta fortunes';
+  });
 }
 
 function decision(text) {
