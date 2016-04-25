@@ -4,7 +4,7 @@
 
 require('dotenv').config({silent: true});
 
-const botmon = require('./botmon');
+const botmon = require('./lib/botmon');
 
 botmon.reply(process.argv[2]).then(msg => {
   console.log(msg);

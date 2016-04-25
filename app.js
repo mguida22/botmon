@@ -6,7 +6,7 @@ const got = require('got');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const botmon = require('./botmon');
+const botmon = require('./lib/botmon');
 
 const app = express();
 
